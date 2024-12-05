@@ -522,6 +522,49 @@ public class Graph {
     };
   } // vertices()
 
+  public Iterable<Integer> reachable(int vertex) {
+    return () ->  {
+      return new Iterator<Integer>() {
+        public boolean hasNext() {
+          List<Edge> current = Graph.this.vertices[vertex];
+          for (int i = 0; i < current.size(); i++) {
+            if (!isMarked(current.get(i).target())) {
+              return true;
+            } //if
+          } //for
+          return false;
+        } // hasNext()
+
+        public Integer next() {
+          if (!this.hasNext()) {
+            throw new NoSuchElementException();
+          } // if
+          while (Graph.this.vertexNames[vertex] == null) {
+            pen.printf(Graph.this.vertexName(vertex));
+          } // while
+          return vertex++;
+        } // next()
+      }; // Iterator
+    };
+  }
+  public void reachableHelper (PrintWriter pen, int vertex) {
+    List<Edge> current = vertices[vertex];
+    pen.printf("%s ", vertexName(vertex));
+
+    for (int i = 0; i < current.size(); i++) {
+      if (!isMarked(current.get(i).target())) {
+        mark(current.get(i).target());
+        reachableHelper(pen, current.get(i).target());
+      } //if
+    } //for
+  } // reachableHelper(pen, vertex)
+
+  public void reachable (PrintWriter pen, int vertex) {
+    reachableHelper(pen, vertex);
+    pen.println("");
+    clearMarks();
+  } //reachable(PrintWriter, int)
+
   // +----------+----------------------------------------------------
   // | Mutators |
   // +----------+

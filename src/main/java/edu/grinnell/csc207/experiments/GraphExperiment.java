@@ -33,28 +33,28 @@ public class GraphExperiment {
     g.addEdge("a", "c", 2);
     g.addEdge("b", "c", 3);
     g.addEdge("b", "a", 4);
-    g.dump(pen);
+    g.dumpWithNames(pen);
 
     // Remove a vertex
     g.removeVertex("b");
-    g.dump(pen);
+    g.dumpWithNames(pen);
 
     // Add another vertex
     g.addVertex("d");
     g.addEdge("a", "d", 5);
     g.addEdge("d", "a", 6);
-    g.dump(pen);
+    g.dumpWithNames(pen);
 
     // And another (hopefully, this will replace the old b)
     g.addVertex("e");
     g.addEdge("e", "a", 7);
-    g.dump(pen);
+    g.dumpWithNames(pen);
 
     // And another (hopefully, this will expand the graph again)
     g.addVertex("f");
     g.addEdge("c", "f", 8);
     g.addEdge("f", "c", 9);
-    g.dump(pen);
+    g.dumpWithNames(pen);
 
     // Add an invalid edge
     try {
@@ -68,11 +68,16 @@ public class GraphExperiment {
     for (int i = 1; i <= 4; i++) {
       g.addEdge(0, i, i * 10);
     } // for
-    g.dump(pen);
+    g.dumpWithNames(pen);
 
     // Remove an edge
     g.removeEdge("a", "c");
-    g.dump(pen);
+    g.dumpWithNames(pen);
+
+    // Try to add an edge from a vertice to itself
+    //g.addEdge("a", "a", 2);
+
+    g.reachable(pen, 1);
   } // main(String[])
 
 } // class GraphExperiment

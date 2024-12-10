@@ -10,6 +10,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -315,6 +316,30 @@ public class Graph {
     return this.numVertices;
   } // numVertices
 
+  public int shortestPath(int source, int sink) {
+    List<Edge>[] prioArray = (ArrayList<Edge>[]) new ArrayList[vertices.length];
+    List<Edge> tempEdge;
+    int lowestWeight;
+    List<Edge> temp;
+    int minWeight = 0;
+    for (int i = 0; i < this.vertices.length; i++) {
+      temp = this.vertices[i];
+      for (int j = i; j < prioArray.length; j++) {
+        tempEdge = prioArray[j];
+        prioArray[j] = temp;
+        temp = tempEdge;
+      } // for
+    } // for
+    for (int i = 0; i < prioArray.length; i++) {
+      for (int j = 0; j < prioArray[i].size(); j++) {
+        if (prioArray[i].get(j).weight() < minWeight) {
+          minWeight = prioArray[i].get(j).weight();
+        } // if
+      } // for
+    } // for
+    return minWeight;
+  } // shortestPath
+
   /**
    * Get an iterable for the edges.
    *
@@ -328,7 +353,7 @@ public class Graph {
         int pos = 0;
         // The version number of the graph when this iterator was created
         long version = Graph.this.version;
-        // The current edge iterator
+        // The curreueue, but re-insert the vertex with its new priority each time we update the priority. Doing so means that when we remove vertices from the queue, we will need to recheck their priority.nt edge iterator
         Iterator<Edge> ie = Graph.this.vertices[0].iterator();
         // The current vertex
         int vertex = 0;
